@@ -10,8 +10,27 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
+import torch, streamlit as st
+import timm  # หรือ torchvision.models ถ้าใช้ตรง ๆ
+
+MODEL_PATH = "./densenet121_checkpoint_fold0.pt"
+
+@st.cache_resource
+def load_model():
+    model = timm.create_model("densenet121", pretrained=False, num_classes=8)
+    state = torch.load(MODEL_PATH, map_location="cpu")
+    if isinstance(state, dict) and "state_dict" in state:
+        state = {k.replace("model.", ""): v for k, v in state["state_dict"].items()}
+    model.load_state_dict(state, strict=False)
+    model.eval()
+    return model
+
+model = load_model()
+st.success("✅ Model loaded on CPU")
+
 # ---------- Config ----------
 st.set_page_config(page_title="ML Demo", page_icon="🤖", layout="centered")
+
 
 CLASS_NAMES = [
     "fan abnormal", "fan normal",
