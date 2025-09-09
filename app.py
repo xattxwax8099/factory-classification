@@ -8,7 +8,12 @@ import torchvision.transforms as T
 from torchvision.models import densenet121
 from PIL import Image
 import streamlit as st
+from pandas.io.formats.style import Styler
 import pandas as pd
+
+def style_df(df: pd.DataFrame, predicted_label: str) -> Styler:
+    ...
+
 
 # ---------- Basic Config ----------
 st.set_page_config(page_title="Industry Machine Image Classification", page_icon="🏭", layout="centered")
